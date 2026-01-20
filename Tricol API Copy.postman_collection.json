@@ -1,0 +1,2031 @@
+{
+	"info": {
+		"_postman_id": "4688d434-a2be-4ddd-b688-b20398566531",
+		"name": "Tricol API Copy",
+		"description": "FIFO Inventory Management System for Tricol - Corrected for Sequential Execution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50279215",
+		"_collection_link": "https://mkaroumi123-1898541.postman.co/workspace/Mohamed-%E2%80%9CHemmi%E2%80%9D-Karroumi's-Work~eba39a70-8c87-4903-8298-6062b085ef11/collection/50279215-4688d434-a2be-4ddd-b688-b20398566531?action=share&source=collection_link&creator=50279215"
+	},
+	"item": [
+		{
+			"name": "1. Suppliers",
+			"item": [
+				{
+					"name": "Create Supplier 1 (Main)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"Textile Morocco\",\n    \"address\": \"123 Industrial Zone\",\n    \"city\": \"Casablanca\",\n    \"contactPerson\": \"Ahmed Benali\",\n    \"contactPhone\": \"+212 600 123456\",\n    \"email\": \"contact@textilemorocco.ma\",\n    \"ice\": \"001234567890123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/suppliers",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Supplier 2 (For Delete Test)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"Delete Me SARL\",\n    \"address\": \"Nowhere\",\n    \"city\": \"Rabat\",\n    \"contactPerson\": \"To Delete\",\n    \"contactPhone\": \"+212 600 000000\",\n    \"email\": \"delete@test.ma\",\n    \"ice\": \"999999999999999\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/suppliers",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/suppliers",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Supplier 1 by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/suppliers/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Supplier 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"Textile Morocco SARL\",\n    \"address\": \"456 New Industrial Zone\",\n    \"city\": \"Casablanca\",\n    \"contactPerson\": \"Ahmed Benali\",\n    \"contactPhone\": \"+212 600 123456\",\n    \"email\": \"info@textilemorocco.ma\",\n    \"ice\": \"001234567890123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/suppliers/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/suppliers/search?name=textile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "textile"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Supplier 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/suppliers/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Products",
+			"item": [
+				{
+					"name": "Create Product 1 (Red Fabric)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reference\": \"FAB-RED-001\",\n    \"name\": \"Red Cotton Fabric\",\n    \"description\": \"Premium red cotton for professional uniforms\",\n    \"unitPrice\": 55.00,\n    \"category\": \"Fabrics\",\n    \"reorderLevel\": 50.00,\n    \"unitOfMeasure\": \"m\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product 2 (Buttons)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reference\": \"BTN-BLK-15MM\",\n    \"name\": \"Black Button 15mm\",\n    \"description\": \"Standard black button for uniforms\",\n    \"unitPrice\": 2.50,\n    \"category\": \"Accessories\",\n    \"reorderLevel\": 100.00,\n    \"unitOfMeasure\": \"piece\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product 3 (Zipper - For Delete)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reference\": \"ZIP-BLK-20CM\",\n    \"name\": \"Black Zipper 20cm\",\n    \"description\": \"Metal zipper for jackets\",\n    \"unitPrice\": 8.00,\n    \"category\": \"Accessories\",\n    \"reorderLevel\": 30.00,\n    \"unitOfMeasure\": \"piece\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product 1 by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reference\": \"FAB-RED-001\",\n    \"name\": \"Premium Red Cotton Fabric\",\n    \"description\": \"High quality red cotton for professional uniforms\",\n    \"unitPrice\": 60.00,\n    \"category\": \"Fabrics\",\n    \"reorderLevel\": 60.00,\n    \"unitOfMeasure\": \"m\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/products/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product 1 Stock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/1/stock",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"1",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products by Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/category/Fabrics",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"category",
+								"Fabrics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/search?name=red",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "red"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product 3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/products/3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Orders",
+			"item": [
+				{
+					"name": "Create Order 1 (To Receive)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"supplierId\": 1,\n    \"orderDate\": \"2025-01-10\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 100.00,\n            \"unitPrice\": 50.00\n        },\n        {\n            \"productId\": 2,\n            \"quantity\": 200.00,\n            \"unitPrice\": 2.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order 2 (To Cancel)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"supplierId\": 1,\n    \"orderDate\": \"2025-01-15\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 150.00,\n            \"unitPrice\": 55.00\n        },\n        {\n            \"productId\": 2,\n            \"quantity\": 100.00,\n            \"unitPrice\": 2.50\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order 3 (To Delete)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"supplierId\": 1,\n    \"orderDate\": \"2025-01-20\",\n    \"lines\": [\n        {\n            \"productId\": 2,\n            \"quantity\": 10.00,\n            \"unitPrice\": 2.50\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order 1 by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders by Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/supplier/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"supplier",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders by Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/status/PENDING",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"status",
+								"PENDING"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "\u2b50 Receive Order 1 (Creates Stock!)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/1/receive",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"1",
+								"receive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/2/cancel",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"2",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order 3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Stock",
+			"item": [
+				{
+					"name": "Get Global Stock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product 1 Stock (FIFO Lots)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/product/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Movements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/movements",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"movements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product 1 Movements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/movements/product/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"movements",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Alerts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/alerts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"alerts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Valuation (FIFO)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/valuation",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"valuation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Delivery Notes",
+			"item": [
+				{
+					"name": "Create Delivery Note 1 (To Validate)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workshop\": \"Atelier Couture A\",\n    \"exitDate\": \"2025-01-20\",\n    \"exitReason\": \"PRODUCTION\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 120.00\n        },\n        {\n            \"productId\": 2,\n            \"quantity\": 50.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Delivery Note 2 (To Cancel)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workshop\": \"Atelier Couture B\",\n    \"exitDate\": \"2025-01-21\",\n    \"exitReason\": \"PRODUCTION\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 10.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Delivery Note 3 (To Delete)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workshop\": \"Atelier Couture C\",\n    \"exitDate\": \"2025-01-22\",\n    \"exitReason\": \"PRODUCTION\",\n    \"lines\": [\n        {\n            \"productId\": 2,\n            \"quantity\": 5.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Delivery Notes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Delivery Note 1 by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Delivery Note 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workshop\": \"Atelier Couture B\",\n    \"exitDate\": \"2025-01-21\",\n    \"exitReason\": \"PRODUCTION\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 150.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Workshop",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/workshop/Atelier Couture A",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"workshop",
+								"Atelier Couture A"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/status/DRAFT",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"status",
+								"DRAFT"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "\u2b50 Validate Note 1 (Triggers FIFO!)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/1/validate",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"1",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Note 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/2/cancel",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"2",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note 3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. FIFO Test Flow",
+			"item": [
+				{
+					"name": "1. Create Supplier",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"companyName\": \"FIFO Test Supplier\",\n    \"address\": \"Test Address\",\n    \"city\": \"Casablanca\",\n    \"contactPerson\": \"Test Person\",\n    \"contactPhone\": \"+212 600 000000\",\n    \"email\": \"test@test.ma\",\n    \"ice\": \"999999999999999\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/suppliers",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reference\": \"FIFO-TEST-001\",\n    \"name\": \"FIFO Test Fabric\",\n    \"description\": \"For testing FIFO algorithm\",\n    \"unitPrice\": 50.00,\n    \"category\": \"Test\",\n    \"reorderLevel\": 20.00,\n    \"unitOfMeasure\": \"m\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Create Order 1 (100m @ 50 DH)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"supplierId\": 1,\n    \"orderDate\": \"2025-01-01\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 100.00,\n            \"unitPrice\": 50.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Receive Order 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/1/receive",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"1",
+								"receive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Create Order 2 (150m @ 55 DH)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"supplierId\": 1,\n    \"orderDate\": \"2025-01-05\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 150.00,\n            \"unitPrice\": 55.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Receive Order 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/orders/2/receive",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"2",
+								"receive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. Check Stock (Should be 250m, 2 lots)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/product/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8. Create Delivery Note (120m)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workshop\": \"FIFO Test Workshop\",\n    \"exitDate\": \"2025-01-10\",\n    \"exitReason\": \"PRODUCTION\",\n    \"lines\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 120.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9. Validate Delivery Note (FIFO!)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/delivery-notes/1/validate",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"delivery-notes",
+								"1",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10. Check Stock After FIFO (Should be 130m)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/product/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11. Check Movements (Should show FIFO exits)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/stock/movements/product/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"stock",
+								"movements",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "7. Admin",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Role (Make Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"roleName\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/1/role",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Permission (Grant)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permissionName\": \"DELETE_STOCK\",\n    \"action\": \"GRANT\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/1/permissions",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke Permission (Override)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permissionName\": \"DELETE_STOCK\",\n    \"action\": \"REVOKE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/1/permissions",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"1",
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"token\", jsonData.token);",
+							"}",
+							"      "
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080/api/v1"
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
