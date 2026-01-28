@@ -7,6 +7,7 @@ import com.tricol.exceptions.DuplicateResourceException;
 import com.tricol.exceptions.ResourceNotFoundException;
 import com.tricol.mappers.SupplierMapper;
 import com.tricol.repositories.SupplierRepository;
+import com.tricol.services.AuditLogService;
 import com.tricol.services.SupplierService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SupplierServiceImpl implements SupplierService {
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -29,14 +31,15 @@ public class SupplierServiceImpl implements SupplierService {
 
         Supplier supplier = supplierMapper.toEntity(request);
         Supplier saved = supplierRepository.save(supplier);
+        auditLogService.log(null, "CREATE_SUPPLIER", "Supplier", saved.getId(),
+                "Supplier " + saved.getCompanyName() + " created");
         return supplierMapper.toResponse(saved);
     }
 
     @Override
     public SupplierResponse findById(Long id) {
-        Supplier supplier = supplierRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Supplier with id " + id + " not found.")
-        );
+        Supplier supplier = supplierRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier with id " + id + " not found."));
 
         return supplierMapper.toResponse(supplier);
     }
@@ -63,13 +66,16 @@ public class SupplierServiceImpl implements SupplierService {
 
         if (request.getIce() != null && !request.getIce().equals(supplier.getIce())) {
             if (supplierRepository.existsByIce(request.getIce())) {
-                throw new DuplicateResourceException("A supplier with the ICE " + request.getIce() + " already exists.");
+                throw new DuplicateResourceException(
+                        "A supplier with the ICE " + request.getIce() + " already exists.");
             }
         }
 
         supplierMapper.updateEntityFromRequest(request, supplier);
 
         Supplier updated = supplierRepository.save(supplier);
+        auditLogService.log(null, "UPDATE_SUPPLIER", "Supplier", updated.getId(),
+                "Supplier " + updated.getCompanyName() + " updated");
         return supplierMapper.toResponse(updated);
     }
 
@@ -80,5 +86,6 @@ public class SupplierServiceImpl implements SupplierService {
             throw new ResourceNotFoundException("Supplier with id " + id + " not found.");
         }
         supplierRepository.deleteById(id);
+        auditLogService.log(null, "DELETE_SUPPLIER", "Supplier", id, "Supplier deleted");
     }
 }

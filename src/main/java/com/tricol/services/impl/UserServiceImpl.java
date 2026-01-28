@@ -1,5 +1,11 @@
 package com.tricol.services.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.tricol.dtos.request.PermissionOverrideRequest;
 import com.tricol.dtos.request.UpdateRoleRequest;
 import com.tricol.dtos.response.UserResponse;
@@ -12,13 +18,10 @@ import com.tricol.repositories.PermissionRepository;
 import com.tricol.repositories.RoleAppRepository;
 import com.tricol.repositories.UserAppRepository;
 import com.tricol.repositories.UserPermissionRepository;
+import com.tricol.services.AuditLogService;
 import com.tricol.services.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final RoleAppRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final UserPermissionRepository userPermissionRepository;
+    private final AuditLogService auditLogService;
 
     @Override
     public List<UserResponse> getAllUsers() {
@@ -50,6 +54,7 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("User not found");
         }
         userRepository.deleteById(id);
+        auditLogService.log(null, "DELETE_USER", "User", id, "User deleted");
     }
 
     @Override
@@ -62,7 +67,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
         user.setRole(role);
-        userRepository.save(user); 
+        userRepository.save(user);
+        auditLogService.log(user.getUsername(), "UPDATE_ROLE", "User", userId,
+                "Role changed to " + request.getRoleName());
     }
 
     @Override
@@ -88,6 +95,8 @@ public class UserServiceImpl implements UserService {
                     .build();
             userPermissionRepository.save(newOverride);
         }
+        auditLogService.log(user.getUsername(), "PERMISSION_OVERRIDE", "User", userId,
+                request.getAction() + " " + request.getPermissionName());
     }
 
     private UserResponse mapToResponse(UserApp user) {

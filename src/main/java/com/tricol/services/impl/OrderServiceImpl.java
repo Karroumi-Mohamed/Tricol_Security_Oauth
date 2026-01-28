@@ -1,5 +1,13 @@
 package com.tricol.services.impl;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
 import com.tricol.dtos.request.OrderLineRequest;
 import com.tricol.dtos.request.OrderRequest;
 import com.tricol.dtos.response.OrderResponse;
@@ -14,15 +22,11 @@ import com.tricol.mappers.OrderMapper;
 import com.tricol.repositories.OrderRepository;
 import com.tricol.repositories.ProductRepository;
 import com.tricol.repositories.SupplierRepository;
+import com.tricol.services.AuditLogService;
 import com.tricol.services.OrderService;
 import com.tricol.services.StockService;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final StockService stockService;
     private final OrderMapper orderMapper;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -65,6 +70,8 @@ public class OrderServiceImpl implements OrderService {
         order.calculateTotalAmount();
 
         Order saved = orderRepository.save(order);
+        auditLogService.log(null, "CREATE_ORDER", "Order", saved.getId(),
+                "Order " + saved.getOrderNumber() + " created");
         return orderMapper.toResponse(saved);
     }
 
@@ -174,6 +181,8 @@ public class OrderServiceImpl implements OrderService {
         order.setDeliveryDate(LocalDate.now());
 
         Order saved = orderRepository.save(order);
+        auditLogService.log(null, "RECEIVE_ORDER", "Order", saved.getId(),
+                "Order " + saved.getOrderNumber() + " received");
         return orderMapper.toResponse(saved);
     }
 
@@ -190,6 +199,8 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(OrderStatus.CANCELED);
 
         Order saved = orderRepository.save(order);
+        auditLogService.log(null, "CANCEL_ORDER", "Order", saved.getId(),
+                "Order " + saved.getOrderNumber() + " cancelled");
         return orderMapper.toResponse(saved);
     }
 
