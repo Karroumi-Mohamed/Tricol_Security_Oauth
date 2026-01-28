@@ -66,39 +66,35 @@ public class DataSeeder implements CommandLineRunner {
         Permission viewAuditLogs = createPermissonIfNotFound("VIEW_AUDIT_LOGS");
 
         RoleApp userRole = createRoleIfNotFound("USER", Set.of());
-        
-        RoleApp adminRole = createRoleIfNotFound("ADMIN", Set.of(
-            createProduct, updateProduct, deleteProduct, viewProduct, configureStockAlerts,
-            createOrder, updateOrder, deleteOrder, viewOrder, receiveOrder, cancelOrder, validateOrder,
-            viewStock, manageStock, viewStockValuation, viewStockMovements,
-            createDeliveryNote, updateDeliveryNote, deleteDeliveryNote, viewDeliveryNote, validateDeliveryNote, cancelDeliveryNote,
-            createSupplier, updateSupplier, deleteSupplier, viewSupplier,
-            manageUsers, viewAuditLogs
-        ));
-        
-        createRoleIfNotFound("MAGAZINIER", Set.of(
-            viewStock, manageStock, viewStockMovements, 
-            viewProduct, 
-            createDeliveryNote, viewDeliveryNote, validateDeliveryNote, cancelDeliveryNote,
-            viewOrder
-        ));
-        
-        createRoleIfNotFound("RESP_ACHATS", Set.of(
-            // Order Management per matrix
-            createOrder, updateOrder, cancelOrder, viewOrder, receiveOrder,
-            viewStock, viewStockMovements, viewStockValuation,
-            createSupplier, updateSupplier, deleteSupplier, viewSupplier,
-            // Implied
-            viewProduct
-        ));
 
+        RoleApp adminRole = createRoleIfNotFound("ADMIN", Set.of(
+                createProduct, updateProduct, deleteProduct, viewProduct, configureStockAlerts,
+                createOrder, updateOrder, deleteOrder, viewOrder, receiveOrder, cancelOrder, validateOrder,
+                viewStock, manageStock, viewStockValuation, viewStockMovements,
+                createDeliveryNote, updateDeliveryNote, deleteDeliveryNote, viewDeliveryNote, validateDeliveryNote,
+                cancelDeliveryNote,
+                createSupplier, updateSupplier, deleteSupplier, viewSupplier,
+                manageUsers, viewAuditLogs));
+
+        createRoleIfNotFound("MAGAZINIER", Set.of(
+                viewStock, manageStock, viewStockMovements,
+                viewProduct,
+                createDeliveryNote, viewDeliveryNote, validateDeliveryNote, cancelDeliveryNote,
+                viewOrder));
+
+        createRoleIfNotFound("RESP_ACHATS", Set.of(
+                // Order Management per matrix
+                createOrder, updateOrder, cancelOrder, viewOrder, receiveOrder,
+                viewStock, viewStockMovements, viewStockValuation,
+                createSupplier, updateSupplier, deleteSupplier, viewSupplier,
+                // Implied
+                viewProduct));
 
         createRoleIfNotFound("CHEF_ATELIER", Set.of(
-            viewStock, viewStockMovements,
-            createDeliveryNote, viewDeliveryNote,
-            // Implied
-            viewProduct
-        ));
+                viewStock, viewStockMovements,
+                createDeliveryNote, viewDeliveryNote,
+                // Implied
+                viewProduct));
 
         if (!userRepository.existsByUsername("admin")) {
             UserApp admin = UserApp.builder()
@@ -121,7 +117,6 @@ public class DataSeeder implements CommandLineRunner {
     private RoleApp createRoleIfNotFound(String name, Set<Permission> permissions) {
         return roleRepository.findByName(name)
                 .map(role -> {
-                    // Update existing role with new permissions
                     role.setPermissions(permissions);
                     return roleRepository.save(role);
                 })
