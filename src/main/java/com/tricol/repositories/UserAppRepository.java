@@ -10,5 +10,7 @@ import java.util.Optional;
 public interface UserAppRepository extends JpaRepository<UserApp, Long> {
     Optional<UserApp> findByUsername(String username);
 
+    Optional<UserApp> findByKeyCloakId(String keyCloakId);
+
     boolean existsByUsername(String username);
 }

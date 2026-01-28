@@ -22,9 +22,14 @@ public class UserApp {
 
     @Column(unique = true, nullable = false)
     private String username;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String password;
+
     private boolean active;
+
+    @Column(unique = true)
+    private String keyCloakId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
