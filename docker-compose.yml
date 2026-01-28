@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  tricol-db:
+    image: postgres:15
+    container_name: tricol-db
+    environment:
+      POSTGRES_DB: tricol_db
+      POSTGRES_USER: tricol_user
+      POSTGRES_PASSWORD: tricol_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - tricol_db_data:/var/lib/postgresql/data
+    networks:
+      - tricol-network
+
+  tricol-keycloak:
+    image: quay.io/keycloak/keycloak:23.0.0
+    container_name: tricol-keycloak
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://tricol-keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080" 
+    depends_on:
+      - tricol-keycloak-db
+    networks:
+      - tricol-network
+
+  tricol-keycloak-db:
+    image: postgres:15
+    container_name: tricol-keycloak-db
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    networks:
+      - tricol-network
+
+volumes:
+  tricol_db_data:
+  keycloak_db_data:
+
+networks:
+  tricol-network:
+    driver: bridge
