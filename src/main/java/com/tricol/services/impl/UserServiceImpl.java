@@ -99,6 +99,24 @@ public class UserServiceImpl implements UserService {
                 request.getAction() + " " + request.getPermissionName());
     }
 
+    @Override
+    public UserApp findOrCreateKeycloakUser(String keycloakId, String username) {
+        return userRepository.findByKeyCloakId(keycloakId)
+                .orElseGet(() -> {
+                    RoleApp defaultRole = roleRepository.findByName("USER")
+                            .orElseThrow(() -> new ResourceNotFoundException("Default role not found"));
+
+                    UserApp newUser = UserApp.builder()
+                            .username(username)
+                            .keyCloakId(keycloakId)
+                            .active(true)
+                            .role(defaultRole)
+                            .build();
+
+                    return userRepository.save(newUser);
+                });
+    }
+
     private UserResponse mapToResponse(UserApp user) {
         return UserResponse.builder()
                 .id(user.getId())

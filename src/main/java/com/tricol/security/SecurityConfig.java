@@ -30,6 +30,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.tricol.entities.UserApp;
+import com.tricol.services.UserService;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -37,7 +40,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
+    private final UserService userService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
@@ -70,8 +74,12 @@ public class SecurityConfig {
     public JwtAuthenticationConverter keycloakJwtAuthConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            String keycloakId = jwt.getSubject();
             String username = jwt.getClaimAsString("preferred_username");
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            UserApp user = userService.findOrCreateKeycloakUser(keycloakId, username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+
             return new ArrayList<>(userDetails.getAuthorities());
         });
         return converter;
