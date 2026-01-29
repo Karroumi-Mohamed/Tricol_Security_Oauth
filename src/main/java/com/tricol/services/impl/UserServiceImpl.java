@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserApp findOrCreateKeycloakUser(String keycloakId, String username) {
         return userRepository.findByKeyCloakId(keycloakId)
                 .orElseGet(() -> {

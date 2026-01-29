@@ -56,9 +56,12 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
+        // Handle null password for Keycloak users (they don't have local passwords)
+        String password = user.getPassword() != null ? user.getPassword() : "";
+
         return new User(
                 user.getUsername(),
-                user.getPassword(),
+                password,
                 user.isActive(),
                 true, // accountNonExpired
                 true, // credentialsNonExpired

@@ -28,11 +28,13 @@ import com.tricol.entities.UserApp;
 import com.tricol.services.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -55,18 +57,28 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .bearerTokenResolver(req -> {
                             String header = req.getHeader("Authorization");
-                            if (header == null && !header.startsWith("Bearer ")) {
+                            if (header == null || !header.startsWith("Bearer ")) {
+                                log.debug("No Authorization header or not Bearer token");
                                 return null;
                             }
                             String token = header.substring(7);
 
+                            // Check if it's a local JWT token (our own tokens)
+                            // If jwtService can extract username, it's a local token -> let
+                            // JwtAuthenticationFilter handle it
                             try {
                                 jwtService.extractUsername(token);
+                                // Local JWT detected - return null so OAuth2 resource server skips it
+                                // and JwtAuthenticationFilter processes it instead
+                                log.debug("Local JWT detected - delegating to JwtAuthenticationFilter");
                                 return null;
                             } catch (Exception e) {
-                                return null;
+                                // Not a local JWT (likely a Keycloak token) -> pass to OAuth2 resource server
+                                log.debug("Non-local JWT detected (Keycloak?) - passing to OAuth2 resource server: {}", e.getMessage());
+                                return token;
                             }
                         })
                         .jwt(jwt -> jwt
@@ -87,9 +99,13 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
             String keycloakId = jwt.getSubject();
             String username = jwt.getClaimAsString("preferred_username");
+            log.debug("Keycloak JWT converter - keycloakId: {}, username: {}", keycloakId, username);
 
             UserApp user = userService.findOrCreateKeycloakUser(keycloakId, username);
+            log.debug("Found/created user: {} with role: {}", user.getUsername(), user.getRole() != null ? user.getRole().getName() : "null");
+            
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            log.debug("Loaded authorities for Keycloak user: {}", userDetails.getAuthorities());
 
             return new ArrayList<>(userDetails.getAuthorities());
         });
