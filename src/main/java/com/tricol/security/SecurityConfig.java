@@ -14,12 +14,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,6 +50,9 @@ public class SecurityConfig {
     private final UserService userService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtService jwtService;
+    
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,6 +69,12 @@ public class SecurityConfig {
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            log.error("Access denied: {}", accessDeniedException.getMessage());
+                            jwtAuthenticationEntryPoint.commence(request, response, 
+                                new org.springframework.security.authentication.BadCredentialsException(
+                                    "Access denied: " + accessDeniedException.getMessage(), accessDeniedException));
+                        })
                         .bearerTokenResolver(req -> {
                             String header = req.getHeader("Authorization");
                             if (header == null || !header.startsWith("Bearer ")) {
@@ -97,17 +114,27 @@ public class SecurityConfig {
     public JwtAuthenticationConverter keycloakJwtAuthConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            String keycloakId = jwt.getSubject();
-            String username = jwt.getClaimAsString("preferred_username");
-            log.debug("Keycloak JWT converter - keycloakId: {}, username: {}", keycloakId, username);
+            try {
+                String keycloakId = jwt.getSubject();
+                String username = jwt.getClaimAsString("preferred_username");
+                log.info("Keycloak JWT converter - keycloakId: {}, username: {}", keycloakId, username);
 
-            UserApp user = userService.findOrCreateKeycloakUser(keycloakId, username);
-            log.debug("Found/created user: {} with role: {}", user.getUsername(), user.getRole() != null ? user.getRole().getName() : "null");
-            
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-            log.debug("Loaded authorities for Keycloak user: {}", userDetails.getAuthorities());
+                if (username == null || username.isBlank()) {
+                    log.error("preferred_username claim is missing or empty in Keycloak token");
+                    return new ArrayList<>();
+                }
 
-            return new ArrayList<>(userDetails.getAuthorities());
+                UserApp user = userService.findOrCreateKeycloakUser(keycloakId, username);
+                log.info("Found/created user: {} with role: {}", user.getUsername(), user.getRole() != null ? user.getRole().getName() : "null");
+                
+                UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+                log.info("Loaded authorities for Keycloak user: {}", userDetails.getAuthorities());
+
+                return new ArrayList<GrantedAuthority>(userDetails.getAuthorities());
+            } catch (Exception e) {
+                log.error("Error in Keycloak JWT converter: {}", e.getMessage(), e);
+                return new ArrayList<>();
+            }
         });
         return converter;
     }
@@ -140,5 +167,25 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+    
+    /**
+     * Custom JwtDecoder that validates the token signature using JWKS
+     * but skips issuer validation to allow tokens issued by localhost:8081
+     * to be validated when running inside Docker (where Keycloak is at tricol-keycloak:8080)
+     */
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+        
+        // Only validate timestamp (expiration), skip issuer validation
+        // This allows tokens with issuer "localhost:8081" to work inside Docker
+        OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
+            new JwtTimestampValidator()
+        );
+        decoder.setJwtValidator(validator);
+        
+        log.info("JwtDecoder configured with JWK Set URI: {} (issuer validation disabled for Docker compatibility)", jwkSetUri);
+        return decoder;
     }
 }
