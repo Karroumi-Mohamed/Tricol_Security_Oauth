@@ -98,6 +98,7 @@ services:
       - sonarqube_db_data:/var/lib/postgresql/data
     networks:
       - tricol-network
+
 volumes:
   tricol_db_data:
   keycloak_db_data:
