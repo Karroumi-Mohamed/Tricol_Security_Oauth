@@ -45,9 +45,64 @@ services:
     networks:
       - tricol-network
 
+  tricol-app:
+    build: .
+    container_name: tricol-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://tricol-db:5432/tricol_db
+      SPRING_DATASOURCE_USERNAME: tricol_user
+      SPRING_DATASOURCE_PASSWORD: tricol_password
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://tricol-keycloak:8080/realms/tricol-realm
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://tricol-keycloak:8080/realms/tricol-realm/protocol/openid-connect/certs
+    depends_on:
+      - tricol-db
+      - tricol-keycloak
+    networks:
+      - tricol-network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: tricol-jenkins
+    ports:
+      - "8082:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+    networks:
+      - tricol-network
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: tricol-sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://sonarqube-db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+    depends_on:
+      - sonarqube-db
+    networks:
+      - tricol-network
+
+  sonarqube-db:
+    image: postgres:15
+    container_name: sonarqube-db
+    environment:
+      POSTGRES_DB: sonar
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+    volumes:
+      - sonarqube_db_data:/var/lib/postgresql/data
+    networks:
+      - tricol-network
 volumes:
   tricol_db_data:
   keycloak_db_data:
+  jenkins_data:
+  sonarqube_db_data:
 
 networks:
   tricol-network:
