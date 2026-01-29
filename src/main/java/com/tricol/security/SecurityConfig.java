@@ -1,7 +1,5 @@
 package com.tricol.security;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,18 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -33,6 +27,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.tricol.entities.UserApp;
 import com.tricol.services.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -43,6 +39,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtService jwtService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,6 +55,20 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenResolver(req -> {
+                            String header = req.getHeader("Authorization");
+                            if (header == null && !header.startsWith("Bearer ")) {
+                                return null;
+                            }
+                            String token = header.substring(7);
+
+                            try {
+                                jwtService.extractUsername(token);
+                                return null;
+                            } catch (Exception e) {
+                                return null;
+                            }
+                        })
                         .jwt(jwt -> jwt
                                 .jwtAuthenticationConverter(keycloakJwtAuthConverter())))
                 .authenticationProvider(authenticationProvider())

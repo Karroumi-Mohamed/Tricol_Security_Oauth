@@ -19,4 +19,3 @@ public interface UserService {
     void addPermissionOverride(Long userId, PermissionOverrideRequest request);
 
     UserApp findOrCreateKeycloakUser(String keycloakId, String username);
-}
